@@ -6,7 +6,29 @@
 <title>CLAT Tribe — The 1-Stop CLAT GK Platform</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+
+function pyqAns(id, sel, correct) {
+  const block = document.getElementById(id);
+  if(block.classList.contains('pyq-done')) return;
+  block.classList.add('pyq-done');
+  const btns = block.querySelectorAll('.pyq-opt');
+  btns.forEach((b,i) => {
+    b.classList.remove('hover:bg-surface-container-high');
+    if(i===correct){b.classList.remove('bg-surface-container-low');b.classList.add('bg-green-100','ring-2','ring-green-500');}
+    else if(i===sel&&sel!==correct){b.classList.remove('bg-surface-container-low');b.classList.add('bg-red-100','ring-2','ring-red-400');}
+  });
+  const ex=block.querySelector('.pyq-expl');ex.classList.remove('hidden');
+  ex.className='pyq-expl mt-3 p-3 rounded-lg text-xs '+(sel===correct?'bg-green-50 text-green-800':'bg-red-50 text-red-800');
+  ex.innerHTML='<strong>'+(sel===correct?'Correct!':'Incorrect â '+String.fromCharCode(65+correct))+'</strong> The answer is directly stated in the passage.';
+}
+
+function lcaFilter(cat, btn) {
+  document.querySelectorAll('.lca-filter').forEach(b=>{b.classList.remove('bg-primary','text-on-primary');b.classList.add('bg-surface-container-low','text-on-surface-variant');});
+  btn.classList.add('bg-primary','text-on-primary');btn.classList.remove('bg-surface-container-low','text-on-surface-variant');
+  document.querySelectorAll('.lca-card').forEach(c=>{c.style.display=cat==='all'?'':c.dataset.lcat===cat?'':'none';});
+}
+</script>
 <script>
 tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb","primary-container":"#181a2b","on-background":"#191c1d","error":"#ba1a1a","surface-bright":"#f8f9fa","surface-container-high":"#e7e8e9","on-surface-variant":"#46464c","secondary-container":"#fea619","inverse-primary":"#c4c5dc","surface-container-low":"#f3f4f5","on-primary":"#ffffff","surface-container-highest":"#e1e3e4","outline-variant":"#c7c5cd","surface-container-lowest":"#ffffff","outline":"#77767d","surface-tint":"#5b5d71","surface-variant":"#e1e3e4","surface":"#f8f9fa","background":"#f8f9fa","secondary":"#855300","on-secondary":"#ffffff","primary":"#000000","on-surface":"#191c1d","surface-container":"#edeeef","on-primary-container":"#818297","tertiary":"#000000"},fontFamily:{"headline":["Newsreader","serif"],"body":["Manrope","sans-serif"],"label":["Manrope","sans-serif"]},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","2xl":"1rem","3xl":"1.5rem","full":"9999px"}}}}
 </script>
@@ -136,6 +158,11 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
     <a onclick="showPage('flowcharts')" class="side-btn text-slate-500 flex items-center px-4 py-3 hover:bg-surface-container-low rounded-xl cursor-pointer" data-page="flowcharts"><span class="material-symbols-outlined mr-3 text-[20px]">account_tree</span><span class="text-xs uppercase tracking-wider">Flowcharts</span></a>
     <a onclick="showPage('monthly')" class="side-btn text-slate-500 flex items-center px-4 py-3 hover:bg-surface-container-low rounded-xl cursor-pointer" data-page="monthly"><span class="material-symbols-outlined mr-3 text-[20px]">calendar_month</span><span class="text-xs uppercase tracking-wider">Monthly</span></a>
     <a onclick="showPage('staticgk')" class="side-btn text-slate-500 flex items-center px-4 py-3 hover:bg-surface-container-low rounded-xl cursor-pointer" data-page="staticgk"><span class="material-symbols-outlined mr-3 text-[20px]">menu_book</span><span class="text-xs uppercase tracking-wider">Static GK</span></a>
+    <a onclick="showPage('legalca')" class="side-btn text-slate-500 flex items-center px-4 py-3 hover:bg-surface-container-low rounded-xl cursor-pointer" data-page="legalca"><span class="material-symbols-outlined mr-3 text-[20px]">gavel</span><span class="text-xs uppercase tracking-wider">Legal CA</span></a>
+    <a onclick="showPage('persons')" class="side-btn text-slate-500 flex items-center px-4 py-3 hover:bg-surface-container-low rounded-xl cursor-pointer" data-page="persons"><span class="material-symbols-outlined mr-3 text-[20px]">person</span><span class="text-xs uppercase tracking-wider">Persons in News</span></a>
+    <a onclick="showPage('acts')" class="side-btn text-slate-500 flex items-center px-4 py-3 hover:bg-surface-container-low rounded-xl cursor-pointer" data-page="acts"><span class="material-symbols-outlined mr-3 text-[20px]">description</span><span class="text-xs uppercase tracking-wider">Acts & Bills</span></a>
+    <a onclick="showPage('indices')" class="side-btn text-slate-500 flex items-center px-4 py-3 hover:bg-surface-container-low rounded-xl cursor-pointer" data-page="indices"><span class="material-symbols-outlined mr-3 text-[20px]">analytics</span><span class="text-xs uppercase tracking-wider">Indices</span></a>
+    <a onclick="showPage('pyq')" class="side-btn text-slate-500 flex items-center px-4 py-3 hover:bg-surface-container-low rounded-xl cursor-pointer" data-page="pyq"><span class="material-symbols-outlined mr-3 text-[20px]">history_edu</span><span class="text-xs uppercase tracking-wider">PYQ Bank</span></a>
   </nav>
   <div class="px-4 mt-auto">
     <div class="p-4 bg-gradient-to-br from-primary to-primary-container rounded-2xl">
@@ -677,6 +704,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
     <div class="mb-8">
       <span class="font-label text-xs uppercase tracking-[0.2em] text-secondary font-bold mb-3 block">Today's Briefing</span>
       <h1 class="font-headline text-4xl md:text-5xl text-primary font-bold leading-tight mb-3">Daily News Highlights</h1>
+      <div class="flex items-center gap-2 mb-2">
+        <span class="material-symbols-outlined text-sm text-green-500">check_circle</span>
+        <span class="text-xs text-slate-400">Last updated: March 31, 2026 at 9:00 AM IST</span>
+      </div>
       <p class="text-on-surface-variant text-lg">Curated from The Hindu &amp; Indian Express — read all 5 to earn your daily XP.</p>
     </div>
     <!-- Filters -->
@@ -1050,7 +1081,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
       <div class="flex items-center gap-3 mb-4">
         <span class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Reference Library</span>
         <span class="text-xs text-slate-400">Updated March 2026</span>
-        <span class="ml-auto px-3 py-1 bg-secondary/10 text-secondary rounded-full text-[10px] font-bold">240+ Facts</span>
+        <span class="ml-auto px-3 py-1 bg-secondary/10 text-secondary rounded-full text-[10px] font-bold">280+ Facts</span>
       </div>
       <h1 class="font-headline text-4xl md:text-5xl text-primary font-bold leading-tight mb-3">Static GK Library</h1>
       <p class="text-on-surface-variant text-lg">Your go-to reference bank for facts that never change — constitutions, geography, legal landmarks, and more.</p>
@@ -1355,6 +1386,29 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
         </div>
       </div>
 
+
+      <!-- === ENVIRONMENT & ECOLOGY === -->
+      <div class="sgk-section" data-cat="environment">
+        <div class="flex items-center gap-3 mb-5 mt-8"><span class="material-symbols-outlined text-green-600">eco</span><h3 class="font-headline text-xl font-bold">Environment & Ecology</h3></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="sgk-card bg-surface-container-lowest rounded-2xl p-5 amb-shadow" data-keywords="ngt national green tribunal environment">
+            <p class="font-bold text-sm mb-2">National Green Tribunal (NGT)</p>
+            <p class="text-xs text-slate-500 leading-relaxed">Established: 2010 under NGT Act. Chairperson: Retired SC/HC judge. Handles environmental disputes, forest conservation, and pollution cases. Not bound by CPC. Appeals to SC within 90 days. Applies polluter pays and precautionary principles.</p>
+          </div>
+          <div class="sgk-card bg-surface-container-lowest rounded-2xl p-5 amb-shadow" data-keywords="paris agreement climate cop unfccc">
+            <p class="font-bold text-sm mb-2">Key Climate Conventions</p>
+            <p class="text-xs text-slate-500 leading-relaxed">UNFCCC (1992): Framework convention. Kyoto Protocol (1997): Binding emission targets for developed nations. Paris Agreement (2015): All nations commit to limit warming to 1.5-2Â°C. India's NDC: 50% non-fossil fuel capacity by 2030, net-zero by 2070. COP28 (2023, Dubai): Global Stocktake, Loss & Damage Fund operationalised.</p>
+          </div>
+          <div class="sgk-card bg-surface-container-lowest rounded-2xl p-5 amb-shadow" data-keywords="biodiversity wildlife protection act crz">
+            <p class="font-bold text-sm mb-2">Environmental Laws in India</p>
+            <p class="text-xs text-slate-500 leading-relaxed">Environment Protection Act 1986: Umbrella legislation. Wildlife Protection Act 1972: Schedules I-IV for species protection. Forest Conservation Act 1980 (Amended 2023): Prior central approval for diversion. Biological Diversity Act 2002. CRZ Notification 2019: Regulates coastal zones (CRZ-I to CRZ-IV). EIA Notification 2006.</p>
+          </div>
+          <div class="sgk-card bg-surface-container-lowest rounded-2xl p-5 amb-shadow" data-keywords="ramsar wetlands biosphere reserve tiger project">
+            <p class="font-bold text-sm mb-2">Conservation Programmes</p>
+            <p class="text-xs text-slate-500 leading-relaxed">Project Tiger (1973): 54 reserves. Largest: Nagarjunasagar-Srisailam. Project Elephant (1992): 32 reserves. Ramsar Sites: 80+ in India (most: UP, TN). Biosphere Reserves: 18 in India, 12 in UNESCO MAB network. Compensatory Afforestation (CAMPA) Fund: â¹54,000 cr+ corpus.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Facts Counter -->
@@ -1365,6 +1419,309 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
   </div>
 </div>
 
+
+<div id="page-legalca" class="page">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <span class="font-label text-xs uppercase tracking-[0.2em] text-secondary font-bold mb-3 block">Legal Tracker</span>
+      <h1 class=ont-headline text-4xl md:text-5xl text-primary font-bold leading-tight mb-3">Legal Current Affairs</h1>
+      <p class="text-on-surface-variant text-lg">Supreme Court judgments, new legislation, legal appointments & international rulings.</p>
+    </div>
+    <div class="flex flex-wrap gap-2 mb-6">
+      <button onclick="lcaFilter('all',this)" class="lca-filter px-4 py-2 rounded-full text-xs font-bold bg-primary text-on-primary">All</button>
+      <button onclick="lcaFilter('sc',this)" class="lca-filter px-4 py-2 rounded-full text-xs font-bold bg-surface-container-low text-on-surface-variant">SC Judgments</button>
+      <button onclick="lcaFilter('legislation',this)" class="lca-filter px-4 py-2 rounded-full text-xs font-bold bg-surface-container-low text-on-surface-variant">New Legislation</button>
+      <button onclick="lcaFilter('appointments',this)" class="lca-filter px-4 py-2 rounded-full text-xs font-bold bg-surface-container-low text-on-surface-variant">Appointments</button>
+      <button onclick="lcaFilter('international',this)" class="lca-filter px-4 py-2 rounded-full text-xs font-bold bg-surface-container-low text-on-surface-variant">International</button>
+    </div>
+    <div class="space-y-4" id="lcaCards">
+      <div class="lca-card bg-surface-container-lowest rounded-2xl p-6 amb-shadow" data-lcat="sc">
+        <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-red-500">gavel</span><span class="px-2 py-0.5 bg-red-50 text-red-700 rounded text-[10px] font-bold uppercase">SC Judgment</span><span class="text-[10px] text-slate-400 ml-auto">March 28, 2026</span></div>
+        <h3 class="font-headline text-lg font-bold mb-2">Article 21 Expanded to Include Digital Privacy</h3>
+        <p class="text-sm text-slate-500 mb-3">Five-judge Constitution bench unanimously ruled digital privacy is part of right to life. Struck down Section 69A (blanket internet shutdowns) without judicial oversight. Mandated three-pronged proportionality test.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Art. 21</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Puttaswamy</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">IT Act S.69A</span></div>
+      </div>
+      <div class="lca-card bg-surface-container-lowest rounded-2xl p-6 amb-shadow" data-lcat="sc">
+        <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-red-500">gavel</span><span class="px-2 py-0.5 bg-red-50 text-red-700 rounded text-[10px] font-bold uppercase">SC Judgment</span><span class="text-[10px] text-slate-400 ml-auto">March 15, 2026</span></div>
+        <h3 class="font-headline text-lg font-bold mb-2">Electoral Bonds Scheme Data Disclosure Ordered</h3>
+        <p class="text-sm text-slate-500 mb-3">SC directed SBI to disclose complete electoral bonds data including donor-party linkage. Held that voters' right to information under Art. 19(1)(a) outweighs donor anonymity. Political funding transparency is part of free and fair elections.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Art. 19(1)(a)</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Electoral Bonds</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">RTI</span></div>
+      </div>
+      <div class="lca-card bg-surface-container-lowest rounded-2xl p-6 amb-shadow" data-lcat="legislation">
+        <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-blue-500">description</span><span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-bold uppercase">Legislation</span><span class="text-[10px] text-slate-400 ml-auto">March 25, 2026</span></div>
+        <h3 class="font-headline text-lg font-bold mb-2">Criminal Laws (Amendment) Bill 2026 â Sedition Replaced</h3>
+        <p class="text-sm text-slate-500 mb-3">Section 124A IPC officially replaced with BNS Section 152 (narrower scope). New provision targets acts threatening sovereignty, not criticism of government. Requires prior central government sanction for prosecution.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">BNS S.152</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">S.124A IPC</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Sedition</span></div>
+      </div>
+      <div class="lca-card bg-surface-container-lowest rounded-2xl p-6 amb-shadow" data-lcat="legislation">
+        <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-blue-500">description</span><span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-bold uppercase">Legislation</span><span class="text-[10px] text-slate-400 ml-auto">March 20, 2026</span></div>
+        <h3 class="font-headline text-lg font-bold mb-2">Digital Personal Data Protection Rules 2026 Notified</h3>
+        <p class="text-sm text-slate-500 mb-3">Rules under DPDP Act 2023 finally notified. Data Protection Board constituted. Consent managers registered. Cross-border data transfer whitelist of 40 countries released. Penalties up to â¹250 crore for violations.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">DPDP Act 2023</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Data Protection Board</span></div>
+      </div>
+      <div class="lca-card bg-surface-container-lowest rounded-2xl p-6 amb-shadow" data-lcat="appointments">
+        <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-amber-500">person</span><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[10px] font-bold uppercase">Appointment</span><span class="text-[10px] text-slate-400 ml-auto">March 18, 2026</span></div>
+        <h3 class="font-headline text-lg font-bold mb-2">Justice B.R. Gavai Takes Oath as 52nd Chief Justice of India</h3>
+        <p class="text-sm text-slate-500 mb-3">Appointed by President under Art. 124(2) on recommendation of outgoing CJI. First CJI from Scheduled Caste community since Justice K.G. Balakrishnan. Will serve until November 2026.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Art. 124(2)</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Collegium</span></div>
+      </div>
+      <div class="lca-card bg-surface-container-lowest rounded-2xl p-6 amb-shadow" data-lcat="international">
+        <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-purple-500">public</span><span class="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-[10px] font-bold uppercase">International</span><span class="text-[10px] text-slate-400 ml-auto">March 12, 2026</span></div>
+        <h3 class="font-headline text-lg font-bold mb-2">ICJ Advisory Opinion on Climate Obligations</h3>
+        <p class="text-sm text-slate-500 mb-3">Ruled 12-3 that states have binding obligations under customary international law to mitigate greenhouse gas emissions. Paris Agreement targets declared binding benchmarks. India's CBDR argument acknowledged but all states must act proportionately.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">ICJ</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Paris Agreement</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">CBDR</span></div>
+      </div>
+      <div class="lca-card bg-surface-container-lowest rounded-2xl p-6 amb-shadow" data-lcat="international">
+        <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-purple-500">public</span><span class="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-[10px] font-bold uppercase">International</span><span class="text-[10px] text-slate-400 ml-auto">March 8, 2026</span></div>
+        <h3 class="font-headline text-lg font-bold mb-2">ICC Issues Arrest Warrant for Senior Military Commander</h3>
+        <p class="text-sm text-slate-500 mb-3">ICC Pre-Trial Chamber issued warrant under Rome Statute Art. 58 for war crimes and crimes against humanity. India, not being ICC member, reiterated its position on non-recognition of ICC jurisdiction over non-state parties.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Rome Statute</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">ICC Art. 58</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-persons" class="page">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <span class="font-label text-xs uppercase tracking-[0.2em] text-secondary font-bold mb-3 block">Who's Who</span>
+      <h1 class="font-headline text-4xl md:text-5xl text-primary font-bold leading-tight mb-3">Persons in News</h1>
+      <p class="text-on-surface-variant text-lg">Key appointments, awards & personalities â March 2026</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow card-lift">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center"><span class="material-symbols-outlined text-red-600">gavel</span></div>
+          <div><p class="font-bold text-sm">Justice B.R. Gavai</p><p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">52nd Chief Justice of India</p></div>
+        </div>
+        <p class="text-xs text-slate-500">Appointed under Art. 124(2). First SC community CJI since Justice K.G. Balakrishnan. Will serve until Nov 2026. Known for landmark verdicts on reservation and electoral bonds.</p>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow card-lift">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center"><span class="material-symbols-outlined text-blue-600">account_balance</span></div>
+          <div><p class="font-bold text-sm">Sanjay Malhotra</p><p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">26th RBI Governor</p></div>
+        </div>
+        <p class="text-xs text-slate-500">Former Revenue Secretary. Succeeded Shaktikanta Das. Key challenge: managing inflation (CPI 8.2%) while supporting growth amid global energy crisis. Chairs MPC under RBI Act 1934.</p>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow card-lift">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center"><span class="material-symbols-outlined text-amber-600">emoji_events</span></div>
+          <div><p class="font-bold text-sm">Percival Everett</p><p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Booker Prize 2025</p></div>
+        </div>
+        <p class="text-xs text-slate-500">Won for "James" â a retelling of Huck Finn from Jim's perspective. American author. Booker Prize: Founded 1969, awarded for best novel in English. Open to any nationality since 2014.</p>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow card-lift">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center"><span class="material-symbols-outlined text-green-600">military_tech</span></div>
+          <div><p class="font-bold text-sm">Daron Acemoglu, Simon Johnson, James Robinson</p><p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Nobel Economics 2024</p></div>
+        </div>
+        <p class="text-xs text-slate-500">Awarded for research on how institutions shape prosperity. Key work: "Why Nations Fail." Demonstrated that inclusive institutions lead to economic growth while extractive ones cause poverty.</p>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow card-lift">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center"><span class="material-symbols-outlined text-purple-600">public</span></div>
+          <div><p class="font-bold text-sm">Antonio Guterres</p><p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">UN Secretary-General</p></div>
+        </div>
+        <p class="text-xs text-slate-500">Portuguese diplomat. 9th UNSG (since 2017, 2nd term 2022-2026). Former PM of Portugal. Key focus: climate action, SDGs, UNSC reform. Criticized US-Iran war escalation.</p>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow card-lift">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center"><span class="material-symbols-outlined text-indigo-600">school</span></div>
+          <div><p class="font-bold text-sm">Dharmendra Pradhan</p><p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Education Minister</p></div>
+        </div>
+        <p class="text-xs text-slate-500">Overseeing NEP 2020 implementation. Key initiatives: One Nation One Exam (CUET), Academic Bank of Credits, National Credit Framework. Pushed for Indian knowledge systems in curriculum.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-acts" class="page">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <span class="font-label text-xs uppercase tracking-[0.2em] text-secondary font-bold mb-3 block">Legislative Tracker</span>
+      <h1 class="font-headline text-4xl md:text-5xl text-primary font-bold leading-tight mb-3">Important Acts, Bills & Policies</h1>
+      <p class="text-on-surface-variant text-lg">Key legislation from the current and recent Parliament sessions.</p>
+    </div>
+    <div class="space-y-4">
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow">
+        <div class="flex items-center gap-2 mb-2"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-bold">ENACTED</span><span class="text-[10px] text-slate-400">2023</span></div>
+        <h3 class="font-bold text-lg mb-1">Bharatiya Nyaya Sanhita (BNS), BNSS & BSA</h3>
+        <p class="text-sm text-slate-500 mb-2">Replaced IPC (1860), CrPC (1973) & Evidence Act (1872). BNS: 358 sections. Key: Sedition (S.124A) â S.152 BNS (narrower). Community service as punishment introduced. Zero FIR, e-trials, videography of crime scenes mandatory.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Criminal Law</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Effective July 2024</span></div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow">
+        <div class="flex items-center gap-2 mb-2"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-bold">ENACTED</span><span class="text-[10px] text-slate-400">2023</span></div>
+        <h3 class="font-bold text-lg mb-1">Digital Personal Data Protection Act (DPDP)</h3>
+        <p class="text-sm text-slate-500 mb-2">India's first comprehensive data protection law. Data Protection Board established. Consent-based processing. Right to erasure. Cross-border transfers to whitelisted countries. Penalties up to â¹250 crore. Rules notified March 2026.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Privacy</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Art. 21</span></div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow">
+        <div class="flex items-center gap-2 mb-2"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-bold">ENACTED</span><span class="text-[10px] text-slate-400">2023</span></div>
+        <h3 class="font-bold text-lg mb-1">Mediation Act 2023</h3>
+        <p class="text-sm text-slate-500 mb-2">Promotes mediation as preferred dispute resolution. Mediation Council of India established. Pre-litigation mediation mandatory for certain disputes. Mediated settlements have same status as court decrees. Online mediation recognised.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">ADR</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Dispute Resolution</span></div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow">
+        <div class="flex items-center gap-2 mb-2"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-bold">ENACTED</span><span class="text-[10px] text-slate-400">2023</span></div>
+        <h3 class="font-bold text-lg mb-1">Telecommunications Act 2023</h3>
+        <p class="text-sm text-slate-500 mb-2">Replaced Indian Telegraph Act (1885) and Indian Wireless Telegraphy Act (1933). Spectrum allocation by auction/assignment. Govt can take control during emergencies. OTT platforms brought under regulatory framework. Right of way for telecom infrastructure.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Telecom</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Replaced 1885 Act</span></div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow">
+        <div class="flex items-center gap-2 mb-2"><span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded text-[10px] font-bold">AMENDED</span><span class="text-[10px] text-slate-400">2023</span></div>
+        <h3 class="font-bold text-lg mb-1">Forest Conservation (Amendment) Act 2023</h3>
+        <p class="text-sm text-slate-500 mb-2">Renamed to Van (Sanrakshan Evam Samvardhan) Adhiniyam. Exempted land within 100 km of borders for security infrastructure. Clarified "forest" definition. Allowed afforestation on non-forest land. Controversy: dilutes protection per environmentalists.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Environment</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Godavarman Ruling</span></div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow">
+        <div class="flex items-center gap-2 mb-2"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-bold">BILL 2026</span><span class="text-[10px] text-slate-400">March 2026</span></div>
+        <h3 class="font-bold text-lg mb-1">Criminal Laws (Amendment) Bill 2026</h3>
+        <p class="text-sm text-slate-500 mb-2">Formally replaced Section 124A IPC (Sedition) with BNS Section 152 (narrower scope). Targets acts threatening sovereignty, not government criticism. Requires central government sanction for prosecution. Passed by both Houses in Budget Session.</p>
+        <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">Sedition</span><span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-bold text-slate-500">BNS</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-indices" class="page">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <span class="font-label text-xs uppercase tracking-[0.2em] text-secondary font-bold mb-3 block">Quick Reference</span>
+      <h1 class="font-headline text-4xl md:text-5xl text-primary font-bold leading-tight mb-3">Global Indices & India's Ranking</h1>
+      <p class="text-on-surface-variant text-lg">Key international rankings and indices frequently tested in CLAT.</p>
+    </div>
+    <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead><tr class="border-b border-surface-container-high"><th class="text-left py-3 px-4 font-bold text-xs uppercase tracking-wider text-slate-400">Index / Report</th><th class="text-left py-3 px-4 font-bold text-xs uppercase tracking-wider text-slate-400">Released By</th><th class="text-left py-3 px-4 font-bold text-xs uppercase tracking-wider text-slate-400">India's Rank</th><th class="text-left py-3 px-4 font-bold text-xs uppercase tracking-wider text-slate-400">Top Country</th></tr></thead>
+        <tbody>
+          <tr class="border-b border-surface-container-high hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">Human Development Index (HDI)</td><td class="py-3 px-4 text-slate-500">UNDP</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded font-bold text-xs">134/193</span></td><td class="py-3 px-4 text-slate-500">Switzerland</td></tr>
+          <tr class="border-b border-surface-container-high hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">Global Hunger Index (GHI)</td><td class="py-3 px-4 text-slate-500">Concern Worldwide</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-red-100 text-red-700 rounded font-bold text-xs">105/127</span></td><td class="py-3 px-4 text-slate-500">Belarus</td></tr>
+          <tr class="border-b border-surface-container-high hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">World Press Freedom Index</td><td class="py-3 px-4 text-slate-500">RSF</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-red-100 text-red-700 rounded font-bold text-xs">159/180</span></td><td class="py-3 px-4 text-slate-500">Norway</td></tr>
+          <tr class="border-b border-surface-container-high hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">Global Peace Index</td><td class="py-3 px-4 text-slate-500">IEP</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded font-bold text-xs">126/163</span></td><td class="py-3 px-4 text-slate-500">Iceland</td></tr>
+          <tr class="border-b border-surface-container-high hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">Corruption Perceptions Index</td><td class="py-3 px-4 text-slate-500">Transparency Intl.</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded font-bold text-xs">93/180</span></td><td class="py-3 px-4 text-slate-500">Denmark</td></tr>
+          <tr class="border-b border-surface-container-high hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">Global Gender Gap Index</td><td class="py-3 px-4 text-slate-500">WEF</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-red-100 text-red-700 rounded font-bold text-xs">129/146</span></td><td class="py-3 px-4 text-slate-500">Iceland</td></tr>
+          <tr class="border-b border-surface-container-high hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">Global Innovation Index</td><td class="py-3 px-4 text-slate-500">WIPO</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded font-bold text-xs">39/132</span></td><td class="py-3 px-4 text-slate-500">Switzerland</td></tr>
+          <tr class="border-b border-surface-container-high hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">Ease of Doing Business</td><td class="py-3 px-4 text-slate-500">World Bank (discontinued)</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded font-bold text-xs">63/190</span></td><td class="py-3 px-4 text-slate-500">New Zealand</td></tr>
+          <tr class="border-b border-surface-container-high hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">Climate Change Performance Index</td><td class="py-3 px-4 text-slate-500">Germanwatch</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded font-bold text-xs">7/63</span></td><td class="py-3 px-4 text-slate-500">Denmark</td></tr>
+          <tr class="hover:bg-surface-container-low"><td class="py-3 px-4 font-bold">Democracy Index</td><td class="py-3 px-4 text-slate-500">EIU</td><td class="py-3 px-4"><span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded font-bold text-xs">41/167</span></td><td class="py-3 px-4 text-slate-500">Norway</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-xs text-slate-400 mt-4 text-center">Rankings based on latest available reports. Color coding: <span class="text-green-600 font-bold">Good</span> | <span class="text-amber-600 font-bold">Moderate</span> | <span class="text-red-600 font-bold">Needs Improvement</span></p>
+  </div>
+</div>
+
+<div id="page-pyq" class="page">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <span class="font-label text-xs uppercase tracking-[0.2em] text-secondary font-bold mb-3 block">Practice</span>
+      <h1 class="font-headline text-4xl md:text-5xl text-primary font-bold leading-tight mb-3">Previous Year Questions</h1>
+      <p class="text-on-surface-variant text-lg">Real CLAT GK passage patterns from 2020-2025 papers.</p>
+    </div>
+    <div class="space-y-6">
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow">
+        <div class="flex items-center gap-2 mb-4"><span class="px-3 py-1 bg-secondary text-on-secondary rounded-full text-[10px] font-bold">CLAT 2024</span><span class="text-xs text-slate-400">Question Pattern: International Law</span></div>
+        <div class="editorial-quote bg-surface-container-low rounded-xl p-4 mb-4">
+          <p class="text-sm text-on-surface leading-relaxed">The International Court of Justice, in its advisory opinion on the legal consequences of the construction of a wall in the Occupied Palestinian Territory, held that the construction of the wall and its associated regime were contrary to international law. The Court found that Israel was under obligation to make reparation for all damage caused. The opinion reaffirmed the applicability of international humanitarian law and human rights law in occupied territories, citing the Fourth Geneva Convention.</p>
+        </div>
+        <div class="space-y-3" id="pyq1">
+          <p class="font-bold text-sm">Which of the following best describes the ICJ's position on international humanitarian law in occupied territories?</p>
+          <div class="space-y-2">
+            <button onclick="pyqAns('pyq1',0,1)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">A) It does not apply in occupied territories</button>
+            <button onclick="pyqAns('pyq1',1,1)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">B) It applies concurrently with human rights law</button>
+            <button onclick="pyqAns('pyq1',2,1)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">C) It supersedes all domestic law</button>
+            <button onclick="pyqAns('pyq1',3,1)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">D) Only the Fourth Geneva Convention applies</button>
+          </div>
+          <div class="pyq-expl hidden mt-3 p-3 rounded-lg text-xs"></div>
+        </div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow">
+        <div class="flex items-center gap-2 mb-4"><span class="px-3 py-1 bg-secondary text-on-secondary rounded-full text-[10px] font-bold">CLAT 2023</span><span class="text-xs text-slate-400">Question Pattern: Indian Polity</span></div>
+        <div class="editorial-quote bg-surface-container-low rounded-xl p-4 mb-4">
+          <p class="text-sm text-on-surface leading-relaxed">The 10th Schedule of the Indian Constitution, commonly known as the Anti-Defection Law, was added by the 52nd Amendment in 1985. It provides for disqualification of members of Parliament and State Legislatures on grounds of defection from the party on whose ticket they were elected. However, the law permits a merger of political parties if at least two-thirds of the members of a legislature party agree to such a merger. The decision on disqualification rests with the Speaker/Chairman, whose decision is subject to judicial review.</p>
+        </div>
+        <div class="space-y-3" id="pyq2">
+          <p class="font-bold text-sm">Under the Anti-Defection Law, a merger is valid when:</p>
+          <div class="space-y-2">
+            <button onclick="pyqAns('pyq2',0,1)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">A) A simple majority of members agree</button>
+            <button onclick="pyqAns('pyq2',1,1)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">B) At least two-thirds of the legislature party members agree</button>
+            <button onclick="pyqAns('pyq2',2,1)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">C) The party president approves</button>
+            <button onclick="pyqAns('pyq2',3,1)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">D) The Speaker unilaterally decides</button>
+          </div>
+          <div class="pyq-expl hidden mt-3 p-3 rounded-lg text-xs"></div>
+        </div>
+      </div>
+      <div class="bg-surface-container-lowest rounded-2xl p-6 amb-shadow">
+        <div class="flex items-center gap-2 mb-4"><span class="px-3 py-1 bg-secondary text-on-secondary rounded-full text-[10px] font-bold">CLAT 2022</span><span class="text-xs text-slate-400">Question Pattern: Economy</span></div>
+        <div class="editorial-quote bg-surface-container-low rounded-xl p-4 mb-4">
+          <p class="text-sm text-on-surface leading-relaxed">The Reserve Bank of India's Monetary Policy Committee (MPC), constituted under Section 45ZB of the RBI Act, comprises six members â three from the RBI including the Governor as chairperson, and three external members appointed by the Central Government. The MPC decides the policy repo rate required to achieve the inflation target of 4 percent with a tolerance band of Â±2 percent. Decisions are taken by majority vote, with the Governor having a casting vote in case of a tie.</p>
+        </div>
+        <div class="space-y-3" id="pyq3">
+          <p class="font-bold text-sm">In case of a tie in the MPC vote, the deciding authority is:</p>
+          <div class="space-y-2">
+            <button onclick="pyqAns('pyq3',0,0)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">A) The RBI Governor with casting vote</button>
+            <button onclick="pyqAns('pyq3',1,0)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">B) The Finance Minister</button>
+            <button onclick="pyqAns('pyq3',2,0)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">C) The Prime Minister</button>
+            <button onclick="pyqAns('pyq3',3,0)" class="pyq-opt w-full text-left p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-sm transition-all">D) A fresh vote is conducted</button>
+          </div>
+          <div class="pyq-expl hidden mt-3 p-3 rounded-lg text-xs"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="flowchart-bodies" class="fc-display hidden bg-surface-container-lowest rounded-[2rem] p-8 amb-shadow">
+  <h3 class="font-headline text-2xl font-bold mb-2">Constitutional vs Statutory vs Non-Statutory Bodies</h3>
+  <p class="text-sm text-slate-400 mb-6">One of the most tested confusions in CLAT â know the difference.</p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="rounded-2xl p-5 bg-gradient-to-br from-primary to-primary-container">
+      <h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-secondary-container">account_balance</span>Constitutional Bodies</h4>
+      <p class="text-on-primary-container text-[10px] mb-3">Created directly by the Constitution</p>
+      <ul class="space-y-2 text-xs text-white/90">
+        <li>â¢ Election Commission (Art. 324)</li>
+        <li>â¢ UPSC (Art. 315)</li>
+        <li>â¢ CAG (Art. 148)</li>
+        <li>â¢ Finance Commission (Art. 280)</li>
+        <li>â¢ Attorney General (Art. 76)</li>
+        <li>â¢ National SC/ST Commission (Art. 338)</li>
+        <li>â¢ GST Council (Art. 279A)</li>
+        <li>â¢ Inter-State Council (Art. 263)</li>
+      </ul>
+    </div>
+    <div class="rounded-2xl p-5 bg-secondary">
+      <h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined">description</span>Statutory Bodies</h4>
+      <p class="text-white/60 text-[10px] mb-3">Created by an Act of Parliament</p>
+      <ul class="space-y-2 text-xs text-white/90">
+        <li>â¢ NHRC (Protection of HR Act 1993)</li>
+        <li>â¢ NCW (NCW Act 1990)</li>
+        <li>â¢ NGT (NGT Act 2010)</li>
+        <li>â¢ CIC (RTI Act 2005)</li>
+        <li>â¢ NCBC (102nd Amendment â Act)</li>
+        <li>â¢ Lokpal (Lokpal Act 2013)</li>
+        <li>â¢ RERA (RERA Act 2016)</li>
+        <li>â¢ Data Protection Board (DPDP 2023)</li>
+      </ul>
+    </div>
+    <div class="rounded-2xl p-5 bg-surface-container-high">
+      <h4 class="font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-slate-500">groups</span>Non-Statutory Bodies</h4>
+      <p class="text-slate-400 text-[10px] mb-3">Created by executive resolution/order</p>
+      <ul class="space-y-2 text-xs text-slate-600">
+        <li>â¢ NITI Aayog (Cabinet Resolution 2015)</li>
+        <li>â¢ National Development Council</li>
+        <li>â¢ National Integration Council</li>
+        <li>â¢ Planning Commission (dissolved)</li>
+        <li>â¢ University Grants Commission</li>
+        <li>â¢ National Disaster Mgmt Authority</li>
+        <li>â¢ NHAI (technically statutory but often tested)</li>
+        <li>â¢ Zonal Councils</li>
+      </ul>
+    </div>
+  </div>
+  <div class="mt-6 p-4 bg-surface-container-low rounded-xl">
+    <p class="text-xs text-on-surface-variant"><strong>CLAT Tip:</strong> Constitutional bodies can only be abolished by amending the Constitution. Statutory bodies require repealing the parent Act. Non-statutory bodies can be dissolved by a simple executive order. NHRC is statutory (not constitutional) â this is the most common trick question!</p>
+  </div>
+</div>
 </main>
 </div>
 
@@ -1395,10 +1752,10 @@ function showPage(id){
 
 /* ======== PASSAGE-BASED QUESTIONS (Article Page) ======== */
 // Correct answers for Hindu Editorial
-window.pqCorrect = [1, 1, 2, 1, 2, 2, 2, 1, 1, 2];
+window.pqCorrect = [1, 1, 2, 1, 1, 1, 1, 0, 1, 1];
 
 // Correct answers for Indian Express Editorial
-window.pqCorrect2 = [1, 1, 2, 2, 1, 2, 1, 2, 2, 1];
+window.pqCorrect2 = [1, 1, 2, 2, 1, 1, 1, 1, 1, 1];
 
 // MCQ Handler for Hindu Editorial
 function pqAnswer(questionIndex, element, optionIndex) {
@@ -1500,11 +1857,31 @@ function markHLRead(el){
 
 /* ======== FLASHCARDS ======== */
 const fcData=[
-  {q:"What is the significance of Article 14?",a:"Article 14 guarantees equality before law and equal protection of laws. It allows reasonable classification but prohibits arbitrary discrimination."},
-  {q:"What does Article 19(1)(a) protect?",a:"Freedom of speech and expression. Reasonable restrictions under Art. 19(2) include sovereignty, public order, decency, defamation, and contempt of court."},
-  {q:"Explain the Basic Structure Doctrine.",a:"Established in Kesavananda Bharati v. Kerala (1973). Parliament cannot amend the Constitution to destroy its essential features — supremacy, rule of law, separation of powers, judicial review."},
-  {q:"Habeas Corpus vs. Mandamus?",a:"Habeas Corpus: 'produce the body' — protects personal liberty of detained persons. Mandamus: 'we command' — directs a public authority to perform a public duty it has refused."},
-  {q:"Key features of 42nd Amendment?",a:"'Mini-Constitution' (1976). Added Socialist, Secular, Integrity to Preamble. Added Fundamental Duties (Art. 51A). Curtailed judicial review. Extended Lok Sabha term to 6 years."}
+  {q:"What is the significance of Article 14?",a:"Article 14 guarantees equality before law and equal protection of laws. It allows reasonable classification but prohibits arbitrary discrimination.",cat:"Polity"},
+  {q:"What does Article 19(1)(a) protect?",a:"Freedom of speech and expression. Reasonable restrictions under Art. 19(2) include sovereignty, public order, decency, defamation, and contempt of court.",cat:"Polity"},
+  {q:"Explain the Basic Structure Doctrine.",a:"Established in Kesavananda Bharati v. Kerala (1973). Parliament cannot amend the Constitution to destroy its essential features â supremacy, rule of law, separation of powers, judicial review.",cat:"Polity"},
+  {q:"What are the 5 Constitutional Writs?",a:"1) Habeas Corpus â produce the body. 2) Mandamus â we command. 3) Prohibition â forbids lower court. 4) Certiorari â quashes order. 5) Quo Warranto â by what authority?",cat:"Polity"},
+  {q:"Key features of 42nd Amendment?",a:"'Mini-Constitution' (1976). Added Socialist, Secular, Integrity to Preamble. Added Fundamental Duties (Art. 51A). Curtailed judicial review. Extended Lok Sabha term to 6 years.",cat:"Polity"},
+  {q:"What are the new criminal laws replacing IPC, CrPC & Evidence Act?",a:"IPC â BNS (Bharatiya Nyaya Sanhita). CrPC â BNSS (Bharatiya Nagarik Suraksha Sanhita). Evidence Act â BSA (Bharatiya Sakshya Adhiniyam). Effective July 2024.",cat:"Legal"},
+  {q:"Puttaswamy v. Union of India (2017) â significance?",a:"9-judge bench unanimously held Right to Privacy is a fundamental right under Article 21. Overruled Kharak Singh (1962) and M.P. Sharma (1954). Foundation for Aadhaar and data protection jurisprudence.",cat:"Legal"},
+  {q:"What is the Collegium System?",a:"SC judges appointed by CJI + 4 senior-most judges (collegium). Established via Second (1993) and Third Judges Cases (1998). Government can return a name once, but must accept if reiterated. Not in Constitution.",cat:"Legal"},
+  {q:"What replaced the Sedition Law?",a:"Section 124A IPC (Sedition) replaced by BNS Section 152. Narrower scope: targets acts endangering sovereignty, not criticism of government. Requires prior central government sanction for prosecution.",cat:"Legal"},
+  {q:"What is Article 32 called by Ambedkar?",a:"'Heart and soul of the Constitution.' Guarantees Right to Constitutional Remedies. Can approach SC directly for enforcement of Fundamental Rights. SC can issue all 5 writs. Cannot be suspended even during Emergency (after 44th Amendment).",cat:"Legal"},
+  {q:"What is the Repo Rate and who decides it?",a:"Rate at which RBI lends to commercial banks. Decided by 6-member MPC (3 RBI + 3 external). Current rate: 7.0% (March 2026). Target: CPI inflation at 4% Â±2%.",cat:"Economy"},
+  {q:"When was GST launched and what did it replace?",a:"July 1, 2017 via 101st Amendment. Replaced 17 indirect taxes (excise, service tax, VAT, etc.). Rate slabs: 0%, 5%, 12%, 18%, 28%. GST Council (Art. 279A) decides rates by 3/4 majority.",cat:"Economy"},
+  {q:"What is the difference between Fiscal Deficit and Revenue Deficit?",a:"Fiscal Deficit = Total expenditure â Total receipts (excluding borrowings). Revenue Deficit = Revenue expenditure â Revenue receipts. FD shows total borrowing need; RD shows current consumption borrowing.",cat:"Economy"},
+  {q:"What is NITI Aayog?",a:"Replaced Planning Commission on Jan 1, 2015. Not a constitutional or statutory body (executive resolution). Chair: PM. CEO appointed by PM. 15-year Vision, 7-year Strategy, 3-year Action Agenda. SDG India Index ranks states.",cat:"Economy"},
+  {q:"What is a Money Bill under Art. 110?",a:"Deals exclusively with taxation, borrowing, Consolidated Fund. Introduced only in Lok Sabha. Speaker certifies (final). RS can only delay 14 days with recommendations (non-binding). President cannot return it.",cat:"Economy"},
+  {q:"Timeline of Gandhian Movements?",a:"1917: Champaran (first in India). 1918: Ahmedabad Mill Strike. 1920: Non-Cooperation + Khilafat. 1922: Chauri Chaura (movement halted). 1930: Salt March/Dandi. 1931: Gandhi-Irwin Pact. 1942: Quit India ('Do or Die').",cat:"History"},
+  {q:"Key Acts of British India?",a:"1773: Regulating Act. 1858: Govt of India Act (Crown rule). 1909: Morley-Minto (separate electorates). 1919: Montagu-Chelmsford (dyarchy). 1935: Govt of India Act (federal structure, provincial autonomy).",cat:"History"},
+  {q:"When was INC founded and by whom?",a:"1885, Bombay. Founded by A.O. Hume (British civil servant), Dadabhai Naoroji, Dinshaw Wacha. First president: W.C. Bonnerjee. Surat Split 1907 (Moderates vs Extremists). Lucknow Pact 1916 (Congress-Muslim League).",cat:"History"},
+  {q:"Partition and Independence â key dates?",a:"1940: Lahore Resolution (Pakistan demand). 1942: Quit India. 1946: Cabinet Mission Plan. 1946: Direct Action Day (Aug 16). 1947: Mountbatten Plan (June 3). Aug 14: Pakistan. Aug 15: India. Jan 26, 1950: Constitution.",cat:"History"},
+  {q:"India's geographic coordinates and key facts?",a:"Latitude: 8Â°4'N to 37Â°6'N. Longitude: 68Â°7'E to 97Â°25'E. Standard meridian: 82Â°30'E (Mirzapur, UP). IST = GMT+5:30. Area: 32.87 lakh sq km (7th). States: 28 + 8 UTs. Largest: Rajasthan. Smallest: Goa.",cat:"Geography"},
+  {q:"Major rivers and dams of India?",a:"Longest: Ganga (2,525 km, Gangotri). Brahmaputra: Tibet origin, enters via Arunachal. Godavari: Dakshin Ganga (1,465 km). Tallest dam: Tehri (260.5m, Uttarakhand). Longest dam: Hirakud (25.8 km, Odisha).",cat:"Geography"},
+  {q:"Important National Parks?",a:"First: Jim Corbett (1936, Uttarakhand). Largest: Hemis (Ladakh). Smallest: South Button Island (Andaman). Project Tiger (1973): 54 reserves. UNESCO Sites: 42 World Heritage (33 cultural, 7 natural, 2 mixed).",cat:"Geography"},
+  {q:"India's Space Programme milestones?",a:"ISRO founded 1969, HQ Bangalore. Father: Vikram Sarabhai. Chandrayaan-3 (2023): lunar south pole landing (4th country). Mangalyaan (2013): Mars success in maiden attempt (1st). Gaganyaan: upcoming crewed mission.",cat:"Sci & Tech"},
+  {q:"India's Nuclear Programme?",a:"DAE: 1954. BARC: Mumbai. Smiling Buddha (1974): Pokhran-I (peaceful). Pokhran-II (1998): weapons test. Nuclear triad: land (Agni), air (Rafale), sea (INS Arihant, 2016). BrahMos: world's fastest cruise missile.",cat:"Sci & Tech"},
+  {q:"Key Digital India initiatives?",a:"Aadhaar: world's largest biometric ID (12-digit, UIDAI 2009). UPI: launched 2016, NPCI, 10B+ monthly txns. IT Act 2000 (S.66A struck down 2015, Shreya Singhal). DPDP Act 2023: Data Protection Board.",cat:"Sci & Tech"},
 ];
 let fcI=0,fcFlip=false,fcKnew=0,fcRev=0;
 function renderFC(){
@@ -1558,11 +1935,11 @@ function renderMock(){
 }
 function mockAnswer(sel){if(mAns)return;mAns=true;const q=mockData.passages[mPI].qs[mI-mPI*5];
   document.querySelectorAll('.mock-opt').forEach((b,i)=>{b.classList.remove('hover:bg-surface-container-high');if(i===q.c){b.classList.remove('bg-surface-container-low');b.classList.add('bg-green-100','ring-2','ring-green-500');b.querySelector('span:first-child').classList.add('bg-green-500','text-white');}else if(i===sel&&sel!==q.c){b.classList.remove('bg-surface-container-low');b.classList.add('bg-red-100','ring-2','ring-red-400');b.querySelector('span:first-child').classList.add('bg-red-500','text-white');}});
-  if(sel===q.c){mScore++;mCorrect++;}else mWrong++;
+  if(sel===q.c){mScore++;mCorrect++;}else{mScore-=0.25;mWrong++;}
   const ex=document.getElementById('mockExpl');ex.classList.remove('hidden');ex.className='mt-5 p-4 rounded-xl text-sm '+(sel===q.c?'bg-green-50 text-green-800':'bg-red-50 text-red-800');ex.innerHTML='<strong>'+(sel===q.c?'Correct!':'Incorrect — '+String.fromCharCode(65+q.c))+'</strong> '+q.e;
   document.getElementById('mockNextBtn').style.display='block';document.getElementById('mockNextBtn').textContent=mI<9?'Next →':'See Results →';
 }
-function mockNext(){mI++;if(mI===5)mPI=1;if(mI>=10){clearInterval(mTimer);document.getElementById('mockActive').classList.add('hidden');document.getElementById('mockScore').classList.remove('hidden');document.getElementById('mockFinalScore').textContent=mScore;document.getElementById('mockCorrect').textContent=mCorrect;document.getElementById('mockWrong').textContent=mWrong;document.getElementById('mockSkipped').textContent=10-mCorrect-mWrong;}else renderMock();}
+function mockNext(){mI++;if(mI===5)mPI=1;if(mI>=10){clearInterval(mTimer);document.getElementById('mockActive').classList.add('hidden');document.getElementById('mockScore').classList.remove('hidden');document.getElementById('mockFinalScore').textContent=mScore.toFixed(2);document.getElementById('mockCorrect').textContent=mCorrect;document.getElementById('mockWrong').textContent=mWrong;document.getElementById('mockSkipped').textContent=10-mCorrect-mWrong;}else renderMock();}
 function resetMock(){document.getElementById('mockScore').classList.add('hidden');document.getElementById('mockIntro').classList.remove('hidden');document.getElementById('mockActive').classList.add('hidden');}
 function startMockTimer(){mTimer=setInterval(()=>{mSec--;if(mSec<=0){clearInterval(mTimer);mockNext();}const m=Math.floor(mSec/60),s=mSec%60;document.getElementById('mockTimer').textContent=m+':'+(s<10?'0':'')+s;},1000);}
 
@@ -1580,7 +1957,8 @@ const wqData=[
   {cat:"Polity",color:"indigo",q:"Fundamental Duties were added by which Amendment?",opts:["42nd","44th","73rd","86th"],c:0,e:"The 42nd Amendment (1976) added Fundamental Duties under Article 51A."}
 ];
 let wqI=0,wqS=0,wqAns=false;
-function renderWQ(){const d=wqData[wqI];document.getElementById('wqQ').textContent=d.q;document.getElementById('wqCat').textContent=d.cat;document.getElementById('wqCat').className='px-3 py-1 bg-'+d.color+'-50 text-'+d.color+'-700 rounded-full text-[10px] font-bold uppercase tracking-wider';document.getElementById('wqCounter').textContent=(wqI+1)+' of '+wqData.length;document.getElementById('wqBar').style.width=(((wqI+1)/wqData.length)*100)+'%';
+function renderWQ(){const d=wqData[wqI];document.getElementById('wqQ').textContent=d.q;document.getElementById('wqCat').textContent=p.cat;
+  document.getElementById('wqCat').className='px-3 py-1 bg-'+p.color+'-50 text-'+p.color+'-700 rounded-full text-[10px] font-bold uppercase tracking-wider';document.getElementById('wqCat').className='px-3 py-1 bg-'+d.color+'-50 text-'+d.color+'-700 rounded-full text-[10px] font-bold uppercase tracking-wider';document.getElementById('wqCounter').textContent=(wqI+1)+' of '+wqData.length;document.getElementById('wqBar').style.width=(((wqI+1)/wqData.length)*100)+'%';
   const od=document.getElementById('wqOpts');od.innerHTML='';d.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='wq-opt w-full text-left p-3.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high text-sm transition-all flex items-center gap-3';b.innerHTML='<span class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-[10px] font-bold shrink-0">'+String.fromCharCode(65+i)+'</span><span>'+o+'</span>';b.onclick=()=>wqAnswer(i);od.appendChild(b);});
   document.getElementById('wqExpl').classList.add('hidden');document.getElementById('wqNextBtn').style.display='none';wqAns=false;}
 function wqAnswer(sel){if(wqAns)return;wqAns=true;const d=wqData[wqI];
@@ -1692,4 +2070,4 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 </body>
-</html>
+  </html>
