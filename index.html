@@ -6,6 +6,7 @@
 <title>CLAT Tribe — The 1-Stop CLAT GK Platform</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
 
 function pyqAns(id, sel, correct) {
@@ -38,7 +39,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
 /* Glassmorphism — 70% opacity + heavy blur per design system */
 .glass{background:rgba(255,255,255,0.70);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 /* Page transitions */
-.page{display:none;opacity:0;transition:opacity .3s ease}.page.active{display:block;opacity:1}
+.page{display:none;opacity:0;transition:opacity .3s ease;overflow:hidden}.page.active{display:block;opacity:1}
 /* Tabs */
 .tab-btn{transition:all .2s;position:relative}.tab-btn.active-tab{color:#855300;font-weight:700}
 .tab-btn.active-tab::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:60%;height:2.5px;background:#855300;border-radius:2px}
@@ -122,6 +123,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
       <button onclick="showPage('mocktest')" class="tab-btn text-sm text-slate-500 px-4 py-5" data-page="mocktest">Mock Test</button>
       <button onclick="showPage('analytics')" class="tab-btn text-sm text-slate-500 px-4 py-5" data-page="analytics">Analytics</button>
     </nav>
+    <button class="md:hidden p-2 hover:bg-surface-container-low rounded-full" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
   </div>
   <div class="flex items-center gap-3">
     <!-- XP Badge in nav -->
@@ -140,7 +142,17 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
   </div>
 </header>
 
-<div class="flex min-h-screen">
+<div id="mobileMenu" class="hidden md:hidden fixed top-16 left-0 w-full glass amb-shadow z-50 p-4 space-y-1">
+  <button onclick="showPage('dashboard');document.getElementById('mobileMenu').classList.add('hidden')" class="w-full text-left px-4 py-3 text-sm font-medium rounded-xl hover:bg-surface-container-low flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">dashboard</span>Dashboard</button>
+  <button onclick="showPage('article');document.getElementById('mobileMenu').classList.add('hidden')" class="w-full text-left px-4 py-3 text-sm font-medium rounded-xl hover:bg-surface-container-low flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">article</span>Article</button>
+  <button onclick="showPage('highlights');document.getElementById('mobileMenu').classList.add('hidden')" class="w-full text-left px-4 py-3 text-sm font-medium rounded-xl hover:bg-surface-container-low flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">newspaper</span>Daily News</button>
+  <button onclick="showPage('flashcards');document.getElementById('mobileMenu').classList.add('hidden')" class="w-full text-left px-4 py-3 text-sm font-medium rounded-xl hover:bg-surface-container-low flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">style</span>Flashcards</button>
+  <button onclick="showPage('mocktest');document.getElementById('mobileMenu').classList.add('hidden')" class="w-full text-left px-4 py-3 text-sm font-medium rounded-xl hover:bg-surface-container-low flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">description</span>Mock Test</button>
+  <button onclick="showPage('weeklyquiz');document.getElementById('mobileMenu').classList.add('hidden')" class="w-full text-left px-4 py-3 text-sm font-medium rounded-xl hover:bg-surface-container-low flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">quiz</span>Weekly Quiz</button>
+  <button onclick="showPage('analytics');document.getElementById('mobileMenu').classList.add('hidden')" class="w-full text-left px-4 py-3 text-sm font-medium rounded-xl hover:bg-surface-container-low flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">leaderboard</span>Analytics</button>
+</div>
+
+<div class="flex">
 <!-- ====== SIDEBAR ====== -->
 <aside class="fixed left-0 top-0 h-full flex flex-col pt-20 pb-6 w-60 z-40 bg-surface-container-low hidden lg:flex">
   <div class="px-5 mb-6">
@@ -166,9 +178,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
   </nav>
   <div class="px-4 mt-auto">
     <div class="p-4 bg-gradient-to-br from-primary to-primary-container rounded-2xl">
-      <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-secondary-container filled text-sm">local_fire_department</span><span class="text-xs font-bold text-secondary-container">12 Day Streak</span></div>
-      <p class="text-[10px] text-on-primary-container mb-3">Keep going! You're in the top 5%.</p>
-      <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden"><div class="bg-secondary-container h-full rounded-full" style="width:78%"></div></div>
+      <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-secondary-container filled text-sm">local_fire_department</span><span class="text-xs font-bold text-secondary-container" id="sideStreak">0 Day Streak</span></div>
+      <p class="text-[10px] text-on-primary-container mb-3" id="sideStreakMsg">Keep it up! 20 more days for reward</p>
+      <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden"><div class="bg-secondary-container h-full rounded-full" style="width:0%"></div></div>
     </div>
   </div>
 </aside>
@@ -878,6 +890,33 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#d9dadb"
         </div>
         <p class="text-sm text-slate-500 mb-8">Each passage will be followed by 5 MCQs. +1 for correct, −0.25 for incorrect. This mirrors the actual CLAT paper format.</p>
         <button onclick="startMock()" class="bg-secondary text-on-secondary px-10 py-4 rounded-xl font-bold text-sm hover:brightness-110 transition-all shadow-[inset_0_-2px_0_rgba(0,0,0,0.15)]">START MOCK TEST</button>
+      </div>
+
+      <!-- 02. Difficulty & Duration -->
+      <div class="mb-8">
+        <p class="flex items-center gap-2 text-xs font-bold tracking-widest text-secondary uppercase mb-6"><span class="w-8 h-px bg-secondary"></span>02. Configuration</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-5 rounded-2xl bg-surface-container-lowest ghost-border cursor-pointer card-lift border-2 border-transparent hover:border-secondary/30" onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.classList.remove('border-secondary','bg-secondary/5'));this.classList.add('border-secondary','bg-secondary/5')">
+            <h4 class="font-bold text-sm">Foundation</h4>
+            <p class="text-xs text-slate-400 mt-1">30 questions \u00b7 45 mins \u00b7 Basic</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-container-lowest ghost-border cursor-pointer card-lift border-2 border-transparent hover:border-secondary/30" onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.classList.remove('border-secondary','bg-secondary/5'));this.classList.add('border-secondary','bg-secondary/5')">
+            <h4 class="font-bold text-sm">Advanced</h4>
+            <p class="text-xs text-slate-400 mt-1">50 questions \u00b7 60 mins \u00b7 Moderate</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-container-lowest ghost-border cursor-pointer card-lift border-2 border-transparent hover:border-secondary/30" onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.classList.remove('border-secondary','bg-secondary/5'));this.classList.add('border-secondary','bg-secondary/5')">
+            <h4 class="font-bold text-sm">Full Mock</h4>
+            <p class="text-xs text-slate-400 mt-1">120 questions \u00b7 120 mins \u00b7 CLAT Pattern</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start Button -->
+      <div class="text-center">
+        <button class="px-12 py-4 bg-gradient-to-r from-secondary to-[#b37200] text-white font-bold text-sm uppercase tracking-widest rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+          <span class="material-symbols-outlined mr-2 align-middle">play_arrow</span>Begin Mock Test
+        </button>
+        <p class="text-xs text-slate-400 mt-3">Select at least one subject and a difficulty level to begin</p>
       </div>
     </div>
     <!-- Mock Active -->
@@ -1748,6 +1787,7 @@ function showPage(id){
   document.querySelectorAll('.mob-btn').forEach(b=>{b.classList.remove('text-secondary');b.classList.add('text-slate-400');b.querySelector('.material-symbols-outlined').classList.remove('filled');});
   const m=document.querySelector('.mob-btn[data-page="'+id+'"]');if(m){m.classList.add('text-secondary');m.classList.remove('text-slate-400');m.querySelector('.material-symbols-outlined').classList.add('filled');}
   window.scrollTo(0,0);
+  const mm=document.getElementById('mobileMenu');if(mm)mm.classList.add('hidden');
 }
 
 /* ======== PASSAGE-BASED QUESTIONS (Article Page) ======== */
